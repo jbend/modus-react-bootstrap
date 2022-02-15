@@ -1,9 +1,9 @@
 import React from "react"
-import { Row, Col } from "@trimbleinc/modus-react-bootstrap"
+import { Row, Col } from "../../../src"
 import SideNav from "./SideNav"
 import TableOfContents from "./TableOfContents"
 
-function MainContent({ children, ...props }) {
+function MainContent({ children }) {
   return (
     <main role="main" className="my-5 container">
       <Row>
@@ -14,7 +14,7 @@ function MainContent({ children, ...props }) {
           {children}
         </Col>
         <Col className="d-none d-xl-block menu-right" xl={2}>
-          <TableOfContents></TableOfContents>
+          <TableOfContents />
         </Col>
       </Row>
     </main>

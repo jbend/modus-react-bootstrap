@@ -1,54 +1,40 @@
-import { Dropdown } from "@trimbleinc/modus-react-bootstrap"
-import React, { useCallback, useEffect } from "react"
-import { StyledContextMenu } from "./styleHelpers"
-import { ContextMenuItem } from "./types"
+import React, { useCallback, useEffect } from 'react';
+import { StyledContextMenu } from './styleHelpers';
+import { ContextMenuItem } from './types';
+import Dropdown from './Dropdown';
 
 interface ContextMenuProps extends React.HTMLProps<HTMLDivElement> {
-  menu: ContextMenuItem[]
-  anchorPointX: string | number
-  anchorPointY: string | number
-  onClose: (...args: any[]) => void
+  menu: ContextMenuItem[];
+  anchorPointX: string | number;
+  anchorPointY: string | number;
+  onClose: (...args: any[]) => void;
 }
 
 export function ContextMenu(
-  props: React.PropsWithChildren<ContextMenuProps> & {
-    ref?: React.Ref<HTMLDivElement>
-  }
+  props: React.PropsWithChildren<ContextMenuProps>,
 ): React.ReactElement {
-  const {
-    menu,
-    anchorPointX,
-    anchorPointY,
-    className,
-    onClose,
-    children,
-    ...rest
-  } = props
-  const ref = React.useRef(null)
+  const { menu, anchorPointX, anchorPointY, onClose } = props;
+  const ref = React.useRef<any>(null);
 
   const handleClickOutside = useCallback(
-    e => {
+    (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
-        onClose(e)
+        onClose(e);
       }
     },
-    [onClose]
-  )
-
-  const handleToggle = useCallback((isOpen, e) => {
-    if (isOpen) e.preventDefault()
-  }, [])
+    [onClose],
+  );
 
   useEffect(() => {
-    if (!(typeof window === "undefined" || !window.document)) {
-      window.document.addEventListener("mousedown", handleClickOutside)
+    if (!(typeof window === 'undefined' || !window.document)) {
+      window.document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
-      if (!(typeof window === "undefined" || !window.document)) {
-        window.document.removeEventListener("mousedown", handleClickOutside)
+      if (!(typeof window === 'undefined' || !window.document)) {
+        window.document.removeEventListener('mousedown', handleClickOutside);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <StyledContextMenu
@@ -63,7 +49,7 @@ export function ContextMenu(
         return item.children ? (
           <Dropdown id={`list_item_${index}`} drop="right">
             <Dropdown.Toggle as="li" className="list-group-item">
-              <span style={{ marginRight: "10%" }}>{item.title}</span>
+              <span style={{ marginRight: '10%' }}>{item.title}</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -88,10 +74,10 @@ export function ContextMenu(
           >
             {item.title}
           </li>
-        )
+        );
       })}
     </StyledContextMenu>
-  )
+  );
 }
 
-export default ContextMenu
+export default ContextMenu;

@@ -1,6 +1,6 @@
 import React from "react"
 import * as PropTypes from "prop-types"
-import { Card } from "@trimbleinc/modus-react-bootstrap"
+import { Card } from "../../../src"
 
 const propTypes = {
   title: PropTypes.string.isRequired,

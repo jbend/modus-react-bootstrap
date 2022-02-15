@@ -4,6 +4,7 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
+
 import { createContext } from 'react';
 
 export const TableContext = createContext<any>(null);

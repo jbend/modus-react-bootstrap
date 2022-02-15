@@ -1,6 +1,5 @@
-import React from "react"
-import { useState } from "react"
-import { Form } from "@trimbleinc/modus-react-bootstrap"
+import React, { useState } from "react"
+import { Form } from "../../../src"
 
 const ModusIcons = [
   { icon: "3d_buildings" },
@@ -202,12 +201,12 @@ const ModusIcons = [
   { icon: "zoom_out" },
 ]
 
-const ModusIconItem = ({ icon, tags, ...props }) => {
+const ModusIconItem = ({ icon, tags }) => {
   return (
     <li
       id={icon}
       className="col text-center mb-3 notranslate"
-      data-tags={`{icon} {tags}`}
+      data-tags={`${icon} ${tags}`}
     >
       <div className="border border-bottom-0 py-3">
         <i className="modus-icons notranslate">{icon}</i>
@@ -221,10 +220,10 @@ const ModusIconItem = ({ icon, tags, ...props }) => {
   )
 }
 
-export const ModusIconsListing = props => {
+const ModusIconsListing = () => {
   const [iconList, setIconList] = useState(ModusIcons)
   const handleSearch = event => {
-    let searchText = event.target.value.toLowerCase()
+    const searchText = event.target.value.toLowerCase()
     setIconList(
       ModusIcons.filter(item => item.icon.toLowerCase().includes(searchText))
     )
@@ -239,7 +238,7 @@ export const ModusIconsListing = props => {
           type="search"
           title=""
           required
-          onKeyPress={event => event.keyCode != 13}
+          onKeyPress={event => event.keyCode !== 13}
           onChange={handleSearch}
         />
       </Form.Group>
@@ -254,3 +253,5 @@ export const ModusIconsListing = props => {
     </Form>
   )
 }
+
+export default ModusIconsListing

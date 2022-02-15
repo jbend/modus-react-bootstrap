@@ -2,7 +2,7 @@
   React-Bootstrap v1.6.4 (https://react-bootstrap-v4.netlify.app/)
   Copyright (c) 2014-present Stephen J. Collings, Matthew Honnibal, Pieter Vanderwerff
   Licensed under MIT (https://github.com/react-bootstrap/react-bootstrap/blob/master/LICENSE)
-
+  
   Modus React Bootstrap 
   A React-based component library developed as a common, open source platform for all of Trimble’s web applications built on React.
   Extends React-Bootstrap v1.6.4
@@ -19,6 +19,7 @@ import {
   BsPrefixRefForwardingComponent,
 } from './helpers';
 import { TableContext } from './TableContext';
+import { StyledTable } from './styleHelpers';
 
 export interface TableProps extends BsPrefixAndClassNameOnlyProps {
   striped?: boolean;
@@ -114,7 +115,7 @@ const Table: Table = React.forwardRef<HTMLTableElement, TableProps>(
     const tableProps = tableInstance && tableInstance.getTableProps();
 
     const table = (
-      <table {...tableProps} {...props} className={classes} ref={ref} />
+      <StyledTable {...tableProps} {...props} className={classes} ref={ref} />
     );
     if (responsive) {
       let responsiveClass = `${decoratedBsPrefix}-responsive`;

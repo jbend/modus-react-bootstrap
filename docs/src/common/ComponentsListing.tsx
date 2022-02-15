@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react"
-import { Container, Row, Col, Form } from "@trimbleinc/modus-react-bootstrap"
+import { Container, Row, Col, Form } from "../../../src"
 import ComponentCard from "./ComponentCard"
 import { MenuContext } from "./MenuContext"
 
-const ComponentsListing = props => {
+const ComponentsListing = () => {
   const { menu: childMenu } = useContext(MenuContext)
 
   const [components, setComponents] = useState(childMenu)
   const handleSearch = event => {
-    let searchText = event.target.value.toLowerCase()
+    const searchText = event.target.value.toLowerCase()
     setComponents(
       childMenu.filter(item => item.title.toLowerCase().includes(searchText))
     )

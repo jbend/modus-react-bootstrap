@@ -1,6 +1,5 @@
-import React from "react"
-import { useContext } from "react"
-import { Nav } from "@trimbleinc/modus-react-bootstrap"
+import React, { useContext } from "react"
+import { Nav } from "../../../src"
 
 import { Menu } from "./MenuConfiguration"
 import { MenuContext } from "./MenuContext"
@@ -16,13 +15,14 @@ function NavSection({ activeMenuKey, items }: NavSectionProps) {
         <Nav
           activeKey={activeMenuKey}
           as="ul"
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onSelect={() => {}}
           className="d-block"
         >
           {items.map(item => (
             <Nav.Item key={item.key} as="li">
               <Nav.Link
-                active={item.key == activeMenuKey}
+                active={item.key === activeMenuKey}
                 href={item.path}
                 className="text-dark"
               >

@@ -4,17 +4,16 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
-import * as React from 'react';
-import { useContext } from 'react';
+
+import React, { useContext, useCallback } from 'react';
 import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TableHeadersContext } from './TableContext';
+import { TableContext, TableHeadersContext } from './TableContext';
 
 export interface TableHeaderCellProps
   extends React.HTMLProps<HTMLTableCellElement> {
   accessor?: string;
-  renderer?: (header: any) => React.ReactElement;
 }
 
 const propTypes = {
@@ -27,11 +26,6 @@ const propTypes = {
    * Header Accessor key
    */
   accessor: PropTypes.string,
-
-  /**
-   * Custom Header cell renderer function
-   */
-  renderer: PropTypes.func,
 };
 
 const modusSortArrows = {
@@ -67,24 +61,57 @@ const SortIcon: React.FunctionComponent<SortIconComponentProps> = ({
 const TableHeaderCell = React.forwardRef<
   HTMLTableCellElement,
   TableHeaderCellProps
->(({ accessor, renderer, children, className, ...props }, ref) => {
+>(({ accessor, children, className, ...props }, ref) => {
+  // get context
   const headersContext = useContext(TableHeadersContext);
+  const tableContext = useContext(TableContext);
+
+  // handle right-click
+  const handleContextMenuClick = useCallback((event) => {
+    event.preventDefault();
+    tableContext.onHeaderContextMenu(accessor, event);
+  }, []);
+
+  const handleShowHiddenColumn = useCallback(() => {
+    tableContext.onToggleHiddenColumn(accessor, false);
+  }, []);
+
+  // if header context is present render with header props
   if (headersContext && accessor) {
     const header =
       headersContext && headersContext.find((h) => h.id === accessor);
+
+    if (!header) {
+      return (
+        <div className="hidden-column">
+          <div
+            role="heading"
+            aria-level={1}
+            className="d-flex flex-row align-items-center justify-content-center"
+            onClick={handleShowHiddenColumn}
+          >
+            <i className="modus-icons triangle_left">triangle_left</i>
+            <i className="modus-icons triangle_right">triangle_right</i>
+          </div>
+        </div>
+      );
+    }
+
     const headerProps = merge(
       header.getHeaderProps(
         header.getSortByToggleProps && header.getSortByToggleProps(),
       ),
       { title: '' },
     );
-    const headerLabel = renderer ? renderer(header) : header.render('Header');
+    const headerLabel = header.render('Header');
+
     return (
       <th
         className={classNames('pr-2', className)}
         ref={ref}
         {...headerProps}
         {...props}
+        onContextMenu={handleContextMenuClick}
       >
         <div className="d-flex" style={{ width: '100%' }}>
           <div
@@ -119,6 +146,7 @@ const TableHeaderCell = React.forwardRef<
             )}
           </div>
         </div>
+
         {header.getResizerProps && (
           <div {...header.getResizerProps()} className="table-col-resizable" />
         )}

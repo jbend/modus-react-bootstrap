@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Container, Row } from "@trimbleinc/modus-react-bootstrap"
+import Container from "../../../src/Container"
+import Row from "../../../src/Row"
 import DefaultLayout from "../layouts/DefaultLayout"
 
 const NotFoundPage = props => {

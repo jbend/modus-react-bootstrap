@@ -1,20 +1,9 @@
+import React, { useContext, useEffect, useRef, useState } from "react"
+import ReactDOM from "react-dom"
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live"
 import theme from "prism-react-renderer/themes/github"
-import { Container } from "@trimbleinc/modus-react-bootstrap"
-import React, { useContext, useEffect, useRef, useState } from "react"
-import * as ReactBootstrap from "@trimbleinc/modus-react-bootstrap"
-import ReactDOM from "react-dom"
-import {
-  TableHead,
-  TableBody,
-  TableCell,
-  TableHeaderCell,
-  TableRow,
-  Table,
-  TableContainer,
-  TablePagination,
-  DataTable,
-} from "../common/Table"
+import Container from "../../../src/Container"
+import * as ReactBootstrap from "../../../src"
 
 const CodePreview = props => {
   const scope = {
@@ -25,15 +14,6 @@ const CodePreview = props => {
     ...ReactBootstrap,
     ReactDOM,
     ...props.scope,
-    TableHead,
-    TableBody,
-    TableCell,
-    TableHeaderCell,
-    TableRow,
-    Table,
-    TableContainer,
-    TablePagination,
-    DataTable,
   }
 
   return (
@@ -45,7 +25,7 @@ const CodePreview = props => {
         theme={theme}
       >
         <Container
-          className={`guide-example-block shadow-sm`}
+          className="guide-example-block shadow-sm"
           style={{ padding: "1rem", margin: "auto", ...props.style }}
         >
           <LivePreview className={props.className} />

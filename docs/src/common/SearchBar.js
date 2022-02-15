@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Dropdown, Form, FormControl } from "@trimbleinc/modus-react-bootstrap"
+import { Dropdown, Form, FormControl } from "../../../src"
 
 const SearchBar = () => {
   const [results, setResults] = useState([])
@@ -17,9 +17,9 @@ const SearchBar = () => {
       setShow(false)
   }
 
-  //https://www.gatsbyjs.com/docs/using-client-side-only-packages/
-  //Gatsby is a server side rendering framework, some apis, like window and document are not present during the build process,
-  //so needed some additional checks
+  // https://www.gatsbyjs.com/docs/using-client-side-only-packages/
+  // Gatsby is a server side rendering framework, some apis, like window and document are not present during the build process,
+  // so needed some additional checks
   if (!(typeof window === "undefined" || !window.document)) {
     window.document.addEventListener("mousedown", handleClickOutside)
   }
@@ -30,18 +30,11 @@ const SearchBar = () => {
     if (userInput && userInput.length > 2 && window.__LUNR__) {
       window.__LUNR__.__loaded.then(lunr => {
         const refs = lunr.en.index.search(
-          userInput +
-            "^100" +
-            " " +
-            userInput +
-            "*^10" +
-            " " +
-            "*" +
-            userInput +
-            "^10" +
-            " " +
-            userInput +
-            "~2^1"
+          `${userInput}^100` +
+            ` ${userInput}*^10` +
+            ` ` +
+            `*${userInput}^10` +
+            ` ${userInput}~2^1`
         )
         const pages = refs.map(({ ref }) => lunr.en.store[ref])
         setResults(pages)
@@ -68,7 +61,7 @@ const SearchBar = () => {
       spellCheck="false"
       autoCapitalize="off"
       ref={ref}
-      autoFocus={true}
+      autoFocus
       onClick={e => {
         e.preventDefault()
       }}
@@ -83,7 +76,7 @@ const SearchBar = () => {
             <Dropdown.Toggle
               as={CustomToggle}
               id="dropdown-custom-components"
-            ></Dropdown.Toggle>
+            />
             <Dropdown.Menu
               show={show}
               ref={dropdownRef}

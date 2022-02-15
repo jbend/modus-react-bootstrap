@@ -4,6 +4,7 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
+
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -87,6 +88,7 @@ type MorePagesDropdownProps = {
   pages: number[];
   onPageSelection: (...args: any[]) => void;
 };
+
 const MorePagesDropdown: React.FunctionComponent<MorePagesDropdownProps> = ({
   pages,
   onPageSelection,
@@ -146,9 +148,11 @@ const TablePagination = React.forwardRef<HTMLDivElement, TablePaginationProps>(
     const handlePreviousPage = useCallback(() => {
       onPageChange(pageIndex - 1);
     }, [pageIndex]);
+
     const handleNextPage = useCallback(() => {
       onPageChange(pageIndex + 1);
     }, [pageIndex]);
+
     const handleGotoPage = useCallback((page) => {
       onPageChange(page - 1);
     }, []);

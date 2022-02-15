@@ -1,10 +1,11 @@
+import React from "react"
 import styled from "styled-components"
 import { graphql } from "gatsby"
 import capitalize from "lodash/capitalize"
 import sortBy from "lodash/sortBy"
 import PropTypes from "prop-types"
-import React from "react"
-import { Badge, Table } from "@trimbleinc/modus-react-bootstrap"
+import Badge from "../../../src/Badge"
+import Table from "../../../src/Table"
 
 function getDoclet(doclets = [], tag) {
   const doclet = doclets.find(d => d.tag === tag)

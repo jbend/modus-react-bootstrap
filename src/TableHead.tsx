@@ -4,6 +4,7 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
+
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { CustomPropsWithDisplayName } from './helpers';
@@ -21,7 +22,8 @@ const propTypes = {
 const TableHead = React.forwardRef<HTMLTableSectionElement, TableHeadProps>(
   ({ children, className, ...props }, ref) => {
     const tableContext = useContext(TableContext);
-    if (tableContext) {
+
+    if (tableContext && tableContext.headerGroups) {
       return (
         <TableHeaderGroupsContext.Provider value={tableContext.headerGroups}>
           <thead className={className} {...props} ref={ref}>

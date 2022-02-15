@@ -1,9 +1,7 @@
-import * as PropTypes from "prop-types"
-import React, { useContext } from "react"
-import { Navbar, Nav, Container } from "@trimbleinc/modus-react-bootstrap"
+import React from "react"
+import { Navbar, Nav, Container } from "../../../src"
 import logo from "../assets/img/trimble-logo.svg"
 import SearchBar from "./SearchBar"
-// import { MenuContext } from "./MenuContext"
 
 function Header({ activePage, navigationMenu }) {
   return (
@@ -24,7 +22,7 @@ function Header({ activePage, navigationMenu }) {
               height="26"
               className="img-fluid"
               alt="home"
-            ></img>
+            />
             <div>Modus React Bootstrap</div>
           </Navbar.Brand>
 

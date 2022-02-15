@@ -4,6 +4,7 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
+
 import { MouseEventHandler } from 'react';
 import {
   TableInstance,

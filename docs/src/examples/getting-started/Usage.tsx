@@ -1,4 +1,4 @@
-export const UsageExample = `
+const UsageExample = `
   //index.js
   import React from "react"; //React Core dependency
   import ReactDOM from "react-dom"; //React Core dependency
@@ -43,3 +43,4 @@ export const UsageExample = `
     );
   }
 `
+export default UsageExample

@@ -4,33 +4,28 @@
   Extends React-Bootstrap v1.6.4
   Copyright (c) 2022 Trimble Inc.
  */
-import * as React from 'react';
+
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Column,
   useTable,
   useSortBy,
   usePagination,
   useResizeColumns,
   useFlexLayout,
   TableOptions,
-  UseSortByColumnOptions,
-  UseResizeColumnsColumnOptions,
   TableState,
   Hooks,
   HeaderProps,
   CellProps,
   useRowSelect,
 } from 'react-table';
+import Form from './Form';
 import { TableContext } from './TableContext';
 import { StyledDataTable } from './styleHelpers';
-import Form from './Form';
-
-export type TableColumn = Column<any> &
-  UseResizeColumnsColumnOptions<any> &
-  UseSortByColumnOptions<any> & {
-    sortBy?: boolean;
-  };
+import { ContextMenuState, ContextMenuItem, TableColumn } from './types';
+// eslint-disable-next-line import/no-named-as-default
+import ContextMenu from './ContextMenu';
 
 export interface DataTableProps
   extends Omit<React.HTMLProps<HTMLDivElement>, 'data'>,
@@ -50,7 +45,7 @@ const propTypes = {
   /**
    * DataTable identifier.
    */
-  id: PropTypes.array.isRequired,
+  id: PropTypes.string.isRequired,
 
   /**
    * Array of header data of type TableColumn.
@@ -147,9 +142,10 @@ export function DataTable(
   );
 
   const selectionHook = (hooks: Hooks<any>) => {
-    hooks.visibleColumns.push((columns) => [
+    hooks.visibleColumns.push((cols) => [
       {
         id: 'selector',
+        width: 30,
         disableResizing: true,
         disableGroupBy: true,
         Cell: ({ row }: CellProps<any>) => {
@@ -171,15 +167,15 @@ export function DataTable(
           },
         }),
       },
-      ...columns,
+      ...cols,
     ]);
   };
 
   // Make conditional hooks array
-  const hooks: any = [];
+  const hooks: any = [useFlexLayout];
   if (hasSorting) hooks.push(useSortBy);
   if (hasPagination) hooks.push(usePagination);
-  if (resizeColumns) hooks.push(useFlexLayout, useResizeColumns);
+  if (resizeColumns) hooks.push(useResizeColumns);
   if (!disableRowSelection) hooks.push(useRowSelect);
   if (
     checkBoxRowSelection &&
@@ -207,6 +203,9 @@ export function DataTable(
     headerGroups,
     prepareRow,
     rows,
+    allColumns,
+    toggleHideColumn,
+    toggleHideAllColumns,
     page,
     pageOptions,
     gotoPage,
@@ -224,34 +223,106 @@ export function DataTable(
     ...hooks,
   );
 
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>();
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleHeaderContextMenu = useCallback(
+    (columnId: string, event) => {
+      if (!containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const contextMenuState: ContextMenuState = {
+        positionX: event.clientX - rect.left,
+        positionY: event.clientY - rect.top,
+        items: [
+          {
+            title: 'Hide',
+            onClick: () => {
+              toggleHideColumn(columnId, true);
+              setShowContextMenu(false);
+            },
+          },
+          {
+            title: 'Show Columns',
+            children: allColumns.map((column) => {
+              return {
+                title: (
+                  <Form.Check
+                    label={column.render('Header')}
+                    custom
+                    id={column.id}
+                    data-indeterminate="false"
+                    {...(column.isVisible && { defaultChecked: true })}
+                    onChange={() =>
+                      toggleHideColumn(column.id, column.isVisible)
+                    }
+                  />
+                ),
+              };
+            }),
+          },
+          {
+            title: 'Show All Columns',
+            onClick: () => {
+              toggleHideAllColumns(false);
+              setShowContextMenu(false);
+            },
+          },
+        ] as ContextMenuItem[],
+      };
+
+      setContextMenu(contextMenuState);
+      setShowContextMenu(true);
+    },
+    [toggleHideColumn, toggleHideAllColumns],
+  );
+
+  const handleContextMenuClose = useCallback(() => {
+    setShowContextMenu(false);
+  }, [setShowContextMenu]);
+
   // TODO:
   // Params passed in the children are constructed dynamically decided by the hooks passed to useTable
   // Find a way to create type definition
   return (
-    <TableContext.Provider
-      value={{
-        getTableProps,
-        headerGroups,
-      }}
-    >
-      <StyledDataTable resizecolumns={(resizeColumns && 'true') || 'false'}>
-        <div {...rest} ref={ref}>
-          {children &&
-            children({
-              headerGroups,
-              rows: hasPagination ? page : rows,
-              prepareRow,
-              gotoPage,
-              pageIndex,
-              pageOptions,
-              pageSize,
-              setPageSize,
-              selectedRows:
-                selectedFlatRows && selectedFlatRows.map((d) => d.original),
-            })}
-        </div>
-      </StyledDataTable>
-    </TableContext.Provider>
+    <>
+      <TableContext.Provider
+        value={{
+          getTableProps,
+          headerGroups,
+          onHeaderContextMenu: handleHeaderContextMenu,
+          onToggleHiddenColumn: toggleHideColumn,
+        }}
+      >
+        <StyledDataTable ref={containerRef}>
+          <div {...rest} ref={ref}>
+            {children &&
+              children({
+                headerGroups,
+                rows: hasPagination ? page : rows,
+                prepareRow,
+                gotoPage,
+                pageIndex,
+                pageOptions,
+                pageSize,
+                setPageSize,
+                selectedRows:
+                  selectedFlatRows && selectedFlatRows.map((d) => d.original),
+              })}
+          </div>
+        </StyledDataTable>
+      </TableContext.Provider>
+
+      {showContextMenu && contextMenu && (
+        <ContextMenu
+          menu={contextMenu.items}
+          anchorPointX={contextMenu.positionX}
+          anchorPointY={contextMenu.positionY}
+          onClose={handleContextMenuClose}
+        />
+      )}
+    </>
   );
 }
 

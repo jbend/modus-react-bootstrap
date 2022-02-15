@@ -1,6 +1,4 @@
 import * as React from "react"
-import { useState, useCallback } from "react"
-import { Col, Container, Row } from "@trimbleinc/modus-react-bootstrap"
 import DefaultLayout from "../layouts/DefaultLayout"
 import LinkedHeading from "../common/LinkedHeading"
 import TableOfContents from "../common/TableOfContents"
@@ -15,10 +13,13 @@ import {
   TableContainer,
   TablePagination,
   DataTable,
-} from "../common/Table"
+  Col,
+  Container,
+  Row,
+} from "../../../src"
 import { MakeData as makeData } from "../examples/components/Table"
 
-const ReactTableContainer = props => {
+const ReactTableContainer = () => {
   const columns = React.useMemo(
     () => [
       {
@@ -102,7 +103,7 @@ const ReactTableContainer = props => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, i) => {
+                  {rows.map(row => {
                     prepareRow(row)
                     return (
                       <TableRow {...row.getRowProps()}>
@@ -127,7 +128,7 @@ const ReactTableContainer = props => {
               pageSizeOptions={[10, 20, 30, 40, 50]}
               onPageSizeChange={setPageSize}
               className="border border-tertiary"
-            ></TablePagination>
+            />
           </>
         )}
       </DataTable>
@@ -143,7 +144,7 @@ const ReactTablePage = props => {
         <Container fluid className="pt-5">
           <Container>
             <Row>
-              <Col className="col-12 col-md-3 col-lg-2 menu-left"></Col>
+              <Col className="col-12 col-md-3 col-lg-2 menu-left" />
               <Col xs={12} md={9} xl={8} id="rb-docs-content" className="main">
                 <LinkedHeading id="basicReactTable" h="2" className="h1">
                   React Table with sorting
@@ -152,7 +153,7 @@ const ReactTablePage = props => {
                 <ReactTableContainer />
               </Col>
               <Col className="d-none d-xl-block menu-right" xl={2}>
-                <TableOfContents></TableOfContents>
+                <TableOfContents />
               </Col>
             </Row>
           </Container>
