@@ -1,10 +1,10 @@
-# Modus React Bootstrap
+# Modus React Bootstrap Framework
 
-The Modus React Bootstrap is a React-based component library extended from react-bootstrap component library developed as a common, open source platform for all of Trimble’s web applications built on React. The framework is designed and managed by the Trimble UX Council.
+The Modus React Bootstrap is a React-based component library developed as a common, open source platform for all of Trimble’s web applications built on React. The framework is designed and managed by the Trimble UX Council.
 
 ## Background
 
-Modus React Bootstrap is built upon and extends the React Bootstrap v1.6.x code framework combined with Modus CSS. You can use the Modus CSS files as is, or integrate the SASS files into your own application if you wish to modify it further.
+Modus React Bootstrap combined with Modus CSS is built upon and extends the [React-Bootstrap](https://github.com/react-bootstrap/react-bootstrap) components library. You can use the Modus CSS files as is, or integrate the SASS files into your own application if you wish to modify it further.
 
 ## Install with NPM
 
